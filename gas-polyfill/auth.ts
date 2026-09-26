@@ -1,8 +1,7 @@
 import { authenticate } from "@google-cloud/local-auth";
 import fs from "fs";
 import path from "path";
-import { google, type Common } from "googleapis";
-import { handleGasRequest } from "./api";
+import { google } from "googleapis";
 
 function getScopes(pathToAppsscriptJson: string, ...aditionalScopes: string[]) {
   const filePath = path.resolve(pathToAppsscriptJson);
