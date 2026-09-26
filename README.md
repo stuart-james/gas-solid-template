@@ -1,14 +1,19 @@
 # Description
-This is a template project for easy development of a Google Apps Script Web App with a SolidJS frontend.
+This is a template project for easy development of a Google Apps Script Web App with a SolidJS frontend. This template was set up  to be dropped into an existing project, so the build step will only build client files. If you're looking for help with building server files there are a ton of [options here]()
 
 # Features
 - All the benefits and ease of Vite's build / development system
 - Typesafe api for calling the google.script.run API from the client with dev server support
 
 # Setup 
-1. Clone this repository into your project `git clone <repo_url>`. 
-2. Install [clasp](https://github.com/google/CLASP)  and pull the repo into your build directory or create a new project specifying your rootDir  
-3. Install dependencies: ```bun install```
+1. Clone this repository into your project `git clone <repo_url>`.
+2. Install dependencies: ```bun install```
+3. Update your `tsconfig.json` - add the paths to your public server api functions to the path alias `@api`  in `compilerOptions.paths`. Make sure to include those paths under `include` of they are outside your clients' root directory.
+4. Update the `outDir` in `vite.config.ts` 
+
+# Next
+1. Choose how to build your server files - there are a [lot of options](https://github.com/google/CLASP#migrating-from-2x-to-3x)
+2. 
 ## Development server
 1. Create a `.env` file and add your `SCRIPT_ID`
 2. Follow the steps [outlined here](https://github.com/google/clasp/blob/master/docs/run.md)  to set up  ```clasp run``` for your project, and take note of the path to ```client_secret.json```
