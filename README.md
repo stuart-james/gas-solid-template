@@ -11,9 +11,6 @@ This is a template project for easy development of a Google Apps Script Web App 
 3. Update your `tsconfig.json` - add the paths to your public server api functions to the path alias `@api`  in `compilerOptions.paths`. Make sure to include those paths under `include` of they are outside your clients' root directory.
 4. Update `build.outdir` in `vite.config.ts` to point to your build directory. 
 
-# Next
-1. Choose how to build your server files - there are a [lot of options](https://github.com/google/CLASP#migrating-from-2x-to-3x)
-2. 
 ## Development server
 1. Create a `.env` file and add your `SCRIPT_ID`
 2. Follow the steps [outlined here](https://github.com/google/clasp/blob/master/docs/run.md)  to set up  ```clasp run``` for your project, and take note of the path to ```client_secret.json```
