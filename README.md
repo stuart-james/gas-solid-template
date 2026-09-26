@@ -1,5 +1,5 @@
 # Description
-This is a template project for easy development of a Google Apps Script Web App with a SolidJS frontend. This template was set up  to be dropped into an existing project, so the build step will only build client files. If you're looking for help with building server files there are a ton of [options here]()
+This is a template project for easy development of a Google Apps Script Web App with a SolidJS frontend. This template was set up  to be dropped into an existing project, so the build step will only build client files. If you're looking for help with building server files there are a ton of [options here](https://github.com/google/CLASP#migrating-from-2x-to-3x)
 
 # Features
 - All the benefits and ease of Vite's build / development system
@@ -19,7 +19,12 @@ This is a template project for easy development of a Google Apps Script Web App 
 - `CREDENTIAL_PATH` -  the location that your tokens will be stored after you authorize your development server
 - `APPSSCRIPT_JSON_PATH` -  the location of the  ```appsscript.json```  for your project
 4. Run the auth setup script: ```bun ./gas-polyfill/auth.ts -a```
-
 # Usage
-dev: ```bun run dev``` 
-build: ```bun run build```
+**start dev server**: `bun dev`  
+**build**: `bun build`
+# Server functions
+For developer ergonomics, I created a small typesafe wrapper around `google.script.run` client API that promisifies server function calls. To get the full benefits of that typesafety, make sure to update the path alias `@api` to point to the modules that export your public API functions on your server.  
+```
+createServerFn<K extends keyof ServerApi>(fn: K):
+  (...args: Parameters<ServerApi[K]>) => ReturnType<ServerApi[K]>
+```
