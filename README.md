@@ -9,7 +9,7 @@ This is a template project for easy development of a Google Apps Script Web App 
 1. Clone this repository into your project `git clone <repo_url>`.
 2. Install dependencies: ```bun install```
 3. Update your `tsconfig.json` - add the paths to your public server api functions to the path alias `@api`  in `compilerOptions.paths`. Make sure to include those paths under `include` of they are outside your clients' root directory.
-4. Update the `outDir` in `vite.config.ts` 
+4. Update `build.outdir` in `vite.config.ts` to point to your build directory. 
 
 # Next
 1. Choose how to build your server files - there are a [lot of options](https://github.com/google/CLASP#migrating-from-2x-to-3x)
