@@ -1,8 +1,6 @@
 import * as v from "valibot";
-import { google, type script_v1 } from "googleapis";
-import { createAuthClient } from "./auth.ts";
-
-const authClient = createAuthClient();
+import { google, Common } from "googleapis";
+import { writeFileSync } from "fs";
 
 const RunRequestSchema = v.object({
   function: v.string("Function must be a string!"),
@@ -10,6 +8,7 @@ const RunRequestSchema = v.object({
 });
 
 export async function handleGasRequest(
+  authClient: Common.OAuth2Client,
   scriptId: string,
   args: any,
 ): Promise<{ error?: string; value?: any }> {
@@ -33,7 +32,7 @@ export async function handleGasRequest(
     });
     if (googleResp.status !== 200) {
       return {
-        error: `Script run request failed with response code ${googleResp.status} ${googleResp.statusText}`,
+        error: `Script run request failed with response code: ${googleResp.status} ${googleResp.statusText}`,
       };
     }
     if (googleResp.data.error) {
@@ -47,8 +46,9 @@ export async function handleGasRequest(
       value: googleResp.data.response?.result,
     };
   } catch (e) {
+    writeFileSync("error.json", JSON.stringify(e));
     return {
-      error: `Script run request failed with unknown error: ${e instanceof Error ? e.message : e}`,
+      error: `Script run request failed with unknown error: \n${e}}`,
     };
   }
 }

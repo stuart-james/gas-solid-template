@@ -2,6 +2,7 @@ import { authenticate } from "@google-cloud/local-auth";
 import fs from "fs";
 import path from "path";
 import { google, type Common } from "googleapis";
+import { handleGasRequest } from "./api";
 
 function getScopes(pathToAppsscriptJson: string, ...aditionalScopes: string[]) {
   const filePath = path.resolve(pathToAppsscriptJson);
@@ -50,13 +51,30 @@ function getCredentials(credentialsPath: string) {
   return undefined;
 }
 
-export function createAuthClient() {
-  const client = new google.auth.OAuth2();
-  const credPath = process.env.CREDENTIAL_PATH ?? CREDENTIAL;
+export function createAuthClient(
+  pathToSecrets?: string,
+  pathToCredentials?: string,
+) {
+  const secretPath =
+    pathToSecrets ?? process.env.CLIENT_SECRET_PATH ?? CLIENT_SECRET;
+  const credPath =
+    pathToCredentials ?? process.env.CREDENTIAL_PATH ?? CREDENTIAL;
+
+  const secret = JSON.parse(fs.readFileSync(secretPath).toString());
+  const client = new google.auth.OAuth2(
+    secret.client_id,
+    secret.client_secret2,
+    secret.redirect_uris,
+  );
+
   const creds = getCredentials(credPath);
+
   if (creds) {
     client.setCredentials(creds);
   }
+  client.on("tokens", (creds) => {
+    fs.writeFileSync(credPath, JSON.stringify(creds));
+  });
   return client;
 }
 if (Bun.argv.at(-1) === "-a") {

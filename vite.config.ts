@@ -4,6 +4,7 @@ import solidPlugin from "vite-plugin-solid";
 import path from "path";
 import devtools from "solid-devtools/vite";
 import { handleGasRequest } from "./gas-polyfill/api";
+import { createAuthClient } from "./gas-polyfill/auth";
 
 async function readRequestBody(request: Connect.IncomingMessage) {
   return new Promise<string | object>((res, rej) => {
@@ -22,12 +23,24 @@ async function readRequestBody(request: Connect.IncomingMessage) {
   });
 }
 
-function gasPolyfill(scriptId: string): Plugin {
+function gasPolyfill(mode: string): Plugin {
+  const env = loadEnv(mode, process.cwd(), "");
+
+  const scriptId = env.SCRIPT_ID;
+  const pathToSecret = env.CLIENT_SECRET_PATH;
+  const pathToCreds = env.CREDENTIAL_PATH;
+
+  if (!scriptId) {
+    console.warn(
+      "SCRIPT_ID is not set and required for server functions in dev to work",
+    );
+  }
+
+  const client = createAuthClient(pathToSecret, pathToCreds);
   return {
     name: "gas-polyfill",
     async configureServer(server) {
       server.middlewares.use("/api/gas", async (req, res) => {
-        console.log("SERVER FN REQUEST");
         if (req.method !== "POST") {
           res.statusCode = 400;
           res.end(JSON.stringify({ error: "Must be POST request" }));
@@ -35,7 +48,6 @@ function gasPolyfill(scriptId: string): Plugin {
         if (!scriptId) {
           console.log("NO SCRIPT ID");
           res.statusCode = 500;
-          return;
           res.end(
             JSON.stringify({
               error:
@@ -46,8 +58,7 @@ function gasPolyfill(scriptId: string): Plugin {
         }
         try {
           const body = await readRequestBody(req);
-
-          const googleResp = await handleGasRequest(scriptId, body);
+          const googleResp = await handleGasRequest(client, scriptId, body);
           if (googleResp.error) {
             res.statusCode = 500;
           }
@@ -61,19 +72,12 @@ function gasPolyfill(scriptId: string): Plugin {
   };
 }
 export default defineConfig((configEnv) => {
-  const env = loadEnv(configEnv.mode, process.cwd(), "");
-  const scriptId = env.SCRIPT_ID;
-  if (!scriptId) {
-    console.warn(
-      "SCRIPT_ID is not set and required for server functions in dev to work",
-    );
-  }
   return {
     plugins: [
       devtools(),
       solidPlugin(),
       viteSingleFile(),
-      gasPolyfill(scriptId),
+      gasPolyfill(configEnv.mode),
     ],
     server: {
       port: 5173,
