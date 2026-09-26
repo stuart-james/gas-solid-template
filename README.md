@@ -15,9 +15,9 @@ This is a template project for easy development of a Google Apps Script Web App 
 1. Create a `.env` file and add your `SCRIPT_ID`
 2. Follow the steps [outlined here](https://github.com/google/clasp/blob/master/docs/run.md)  to set up  ```clasp run``` for your project, and take note of the path to ```client_secret.json```
 3.  Update your `.env`  to choose how credentials and other configuration tokens are read and saved: 
-	`CLIENT_SECRET_PATH`  -  wherever you saved `client_secret.json` from the previous step
-	`CREDENTIAL_PATH` -  the location that your tokens will be stored after you authorize your development server
-	`APPSSCRIPT_JSON_PATH` -  the location of the  ```appsscript.json```  for your project
+- `CLIENT_SECRET_PATH`  -  wherever you saved `client_secret.json` from the previous step
+- `CREDENTIAL_PATH` -  the location that your tokens will be stored after you authorize your development server
+- `APPSSCRIPT_JSON_PATH` -  the location of the  ```appsscript.json```  for your project
 4. Run the auth setup script: ```bun ./gas-polyfill/auth.ts -a```
 
 # Usage
