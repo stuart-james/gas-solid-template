@@ -6,7 +6,7 @@ This is a template project for easy development of a Google Apps Script Web App 
 - Typesafe api for calling the google.script.run API from the client with dev server support
 
 # Setup 
-1. Clone this repository into your project `git clone <repo_url>`.
+1. Clone this repository into your project.
 2. Install dependencies: ```bun install```
 3. Update your `tsconfig.json` - add the paths to your public server api functions to the path alias `@api`  in `compilerOptions.paths`. Make sure to include those paths under `include` of they are outside your clients' root directory.
 4. Update `build.outdir` in `vite.config.ts` to point to your build directory. 
