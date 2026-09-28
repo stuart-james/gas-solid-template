@@ -46,7 +46,6 @@ export async function handleGasRequest(
       value: googleResp.data.response?.result,
     };
   } catch (e) {
-    writeFileSync("error.json", JSON.stringify(e));
     return {
       error: `Script run request failed with unknown error: \n${e}}`,
     };
